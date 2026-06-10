@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOO - Culturally Aware AI Demo</title>
+    <title>Sanad AI - Cultural Customer Experience</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
         
@@ -236,14 +236,14 @@
 <body>
 
     <header>
-        <h1>منصة <span>DOO</span> الذكية</h1>
-        <p>نموذج محاكاة لتحليل اللهجات المحلية وأتمتة تجربة العميل (Culturally Aware NLP)</p>
+        <h1>منصة <span>Sanad AI</span> الذكية</h1>
+        <p>نموذج محاكاة متطور لتحليل اللهجات المحلية وتقديم الردود الذكية الفورية</p>
     </header>
 
     <div class="container">
         
         <div class="panel">
-            <div class="panel-title">📡 مراقبة تدفق البيانات وتحليل اللهجة الفوري</div>
+            <div class="panel-title">📡 لوحة مراقبة وتحليل البيانات الحية لـ Sanad</div>
             <div class="table-container">
                 <table>
                     <thead>
@@ -271,12 +271,12 @@
         <div class="chat-widget">
             <div class="chat-header">
                 <div class="dot"></div>
-                <span>المساعد الافتراضي لشركة DOO</span>
+                <span>مساعدك الذكي - Sanad AI</span>
             </div>
             
             <div class="chat-body" id="chatBody">
                 <div class="msg bot">
-                    يا هلا بك! أنا المساعد الذكي، كيف أقدر أخدمك اليوم؟ تقدر تستفسر عن شحنتك، تطلب خصم، أو تلغي طلبك مباشرة بالعامية.
+                    يا هلا بك يا غالي! أنا مساعدك الذكي Sanad، كيف أقدر أفزع لك اليوم؟ تقدر تستفسر عن شحنتك، تطلب خصم، أو تلغي طلبك مباشرة بالعامية.
                 </div>
             </div>
 
@@ -295,137 +295,3 @@
     </div>
 
     <footer>
-        DOO Cultural NLP Simulation Prototype • 2026
-    </footer>
-
-    <script>
-        // توليد معرف جلسة عشوائي للجدول
-        function generateSessionID() {
-            return 'SID-' + Math.floor(Math.random() * 100000);
-        }
-
-        // التمرير التلقائي لأسفل الشات
-        function autoScroll(element) {
-            element.scrollTo({
-                top: element.scrollHeight,
-                behavior: 'smooth'
-            });
-        }
-
-        // تحليل الكلمات العامية وتحديد النية والنفسية
-        function detectIntentAndSentiment(text) {
-            const slangMap = {
-                "مصخت": { intent: "😡 شكوى تأخير", sentiment: "غاضب / عالي" },
-                "وينها": { intent: "📍 تتبع شحنتي", sentiment: "مستاء / متوسط" },
-                "تأخرت": { intent: "😡 شكوى تأخير", sentiment: "غاضب / عالي" },
-                "أكنسل": { intent: "⚙️ إلغاء طلب", sentiment: "محايد" },
-                "خصم": { intent: "🏷️ طلب خصم", sentiment: "إيجابي" }
-            };
-            
-            for (let key in slangMap) {
-                if (text.includes(key)) {
-                    return slangMap[key];
-                }
-            }
-            return { intent: "💬 استفسار عام", sentiment: "محايد" };
-        }
-
-        // إضافة سطر جديد في جدول لوحة التحكم على اليمين
-        function appendNLPLog(rawText, intent, sentiment) {
-            const tableBody = document.getElementById("tableBody");
-            if (!tableBody) return;
-
-            const row = document.createElement("tr");
-            
-            let sentimentStyle = "color: #9ca3af;"; 
-            if (sentiment.includes("غاضب") || sentiment.includes("مستاء")) {
-                sentimentStyle = "color: #fc8181; font-weight: bold;";
-            } else if (sentiment.includes("إيجابي")) {
-                sentimentStyle = "color: #68d391; font-weight: bold;";
-            }
-
-            row.innerHTML = `
-                <td>#${Math.floor(Math.random() * 9000) + 1000}</td>
-                <td>علي البلوشي</td>
-                <td>"${rawText}"</td>
-                <td>${intent}</td>
-                <td><span style="${sentimentStyle}">${sentiment}</span></td>
-            `;
-            
-            tableBody.insertBefore(row, tableBody.firstChild);
-        }
-
-        // إدراج فقاعة محادثة داخل الشات
-        function appendMessage(text, sender) {
-            const chatBody = document.getElementById('chatBody');
-            if (!chatBody) return;
-
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'msg ' + sender;
-            msgDiv.innerText = text;
-            chatBody.appendChild(msgDiv);
-            autoScroll(chatBody);
-        }
-
-        // توليد رد آلي ذكي بالعامية الخليجية يناسب الملف الأول
-        function generateAIResponse(text) {
-            if (text.includes('وين') || text.includes('شحن')) {
-                return "أبشر بسعدك! شحنتك الحين في مركز الفرز بالمنامة، ومتوقع توصلك بكرا العصر إن شاء الله 🚚";
-            } else if (text.includes('أكنسل') || text.includes('تأخرت') || text.includes('مصخت')) {
-                return "ولا يهمك، تم رفع طلب إلغاء لطلبك وبتطير لك رسالة تأكيد بالإلغاء على الجوال فوراً ⚙️";
-            } else if (text.includes('خصم')) {
-                return "من عيوني! استخدم كود الخصم (DOO10) يعطيك 10% خصم إضافي على كل المنتجات 🎉";
-            }
-            return "فهمت عليك يا غالي! جاري تحليل رسالتك وربطها بالسيستم لخدمتك بأسرع وقت ✨";
-        }
-
-        // معالجة الإرسال من الأزرار الجاهزة
-        function sendReply(text) {
-            appendMessage(text, 'user');
-            const quickReplies = document.getElementById('quickReplies');
-            if(quickReplies) quickReplies.style.display = 'none';
-            
-            const { intent, sentiment } = detectIntentAndSentiment(text);
-            appendNLPLog(text, intent, sentiment);
-
-            setTimeout(() => {
-                const botResponse = generateAIResponse(text);
-                appendMessage(botResponse, 'bot');
-            }, 800);
-        }
-
-        // معالجة الإرسال من صندوق الكتابة
-        function handleSend() {
-            const input = document.getElementById('chatInput');
-            if (!input || input.value.trim() === "") return;
-            
-            const userText = input.value;
-            appendMessage(userText, 'user');
-            input.value = "";
-            
-            const quickReplies = document.getElementById('quickReplies');
-            if(quickReplies) quickReplies.style.display = 'none';
-
-            const { intent, sentiment } = detectIntentAndSentiment(userText);
-            appendNLPLog(userText, intent, sentiment);
-
-            setTimeout(() => {
-                const botResponse = generateAIResponse(userText);
-                appendMessage(botResponse, 'bot');
-            }, 800);
-        }
-
-        // تفعيل زر الـ Enter في الكيبورد للإرسال السريع
-        document.addEventListener("DOMContentLoaded", function() {
-            const chatInput = document.getElementById("chatInput");
-            if(chatInput) {
-                chatInput.addEventListener("keypress", function(e) {
-                    if (e.key === "Enter") {
-                        handleSend();
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
