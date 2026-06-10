@@ -221,4 +221,160 @@
             border-radius: 6px;
             font-weight: 600;
             font-size: 13px;
-            cursor: pointer
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding: 20px;
+            color: #4b5563;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>منصة <span>Sanad AI</span> الذكية</h1>
+        <p>نموذج محاكاة متطور لتحليل اللهجات المحلية وتقديم الردود الذكية الفورية</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="panel">
+            <div class="panel-title">📡 لوحة مراقبة وتحليل البيانات الحية لـ Sanad</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الجلسة</th>
+                            <th>العميل</th>
+                            <th>المدخلات الحية (بالعامية)</th>
+                            <th>النية المستخرجة</th>
+                            <th>مؤشر النفسية</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td>#8421</td>
+                            <td>فاطمة الجودر</td>
+                            <td>"مشكورين وصل الفستان يجنن"</td>
+                            <td>💬 استفسار عام</td>
+                            <td><span style="color: #68d391; font-weight: bold;">إيجابي</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="chat-widget">
+            <div class="chat-header">
+                <div class="dot"></div>
+                <span>مساعدك الذكي - Sanad AI</span>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div class="msg bot">
+                    يا هلا بك يا غالي! أنا مساعدك الذكي Sanad، كيف أقدر أفزع لك اليوم؟ تقدر تستفسر عن شحنتك، تطلب خصم، أو تلغي طلبك مباشرة بالعامية.
+                </div>
+            </div>
+
+            <div class="quick-replies" id="quickReplies">
+                <button class="reply-btn" onclick="sendReply('يا غالي مصخت السالفة شحنتي وينها؟')">📍 وين شحنتي؟</button>
+                <button class="reply-btn" onclick="sendReply('أبي أكنسل الطلب لأنه تأخر وايد')">⚙️ إلغاء الطلب</button>
+                <button class="reply-btn" onclick="sendReply('عطونا كود خصم يدلعنا')">🏷️ طلب كود خصم</button>
+            </div>
+
+            <div class="chat-footer">
+                <input type="text" class="chat-input" id="chatInput" placeholder="اكتب رسالتك هنا بالعامية...">
+                <button class="send-btn" onclick="handleSend()">إرسال</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        حقوق النشر &copy; 2026 - منصة Sanad AI
+    </footer>
+
+    <script>
+        function handleSend() {
+            const inputElement = document.getElementById('chatInput');
+            const messageText = inputElement.value.trim();
+            
+            if (messageText !== "") {
+                processMessage(messageText);
+                inputElement.value = "";
+            }
+        }
+
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleSend();
+            }
+        });
+
+        function sendReply(text) {
+            processMessage(text);
+        }
+
+        function processMessage(userText) {
+            const chatBody = document.getElementById('chatBody');
+            
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'msg user';
+            userMsgDiv.textContent = userText;
+            chatBody.appendChild(userMsgDiv);
+            
+            let botResponse = "أبشر بسعدك يا غالي، جاري تحويل طلبك للقسم المختص للرد عليك بأقرب فرصة!";
+            let intent = "💬 استفسار عام";
+            let sentiment = `<span style="color: #68d391; font-weight: bold;">محايد</span>`;
+            
+            // تحسين شروط التحقق لتشمل الكلمات بالعامية بشكل أفضل
+            if (userText.includes('شحنتي') || userText.includes('وينها') || userText.includes('وين')) {
+                botResponse = "ولا تشيل هم يا خوي، شحنتك الحين مع المندوب وفي طريجها لك، بالكثير ساعتين وتوصلك!";
+                intent = "📦 تتبع شحنة";
+                sentiment = `<span style="color: #fc8181; font-weight: bold;">مستعجل / غاضب</span>`;
+            } else if (userText.includes('أكنسل') || userText.includes('إلغاء') || userText.includes('الطلب') || userText.includes('أكنسل')) {
+                botResponse = "حسافة والله! تم إلغاء الطلب بناءً على رغبتك يا غالي، والمبلغ بيرجع لحسابك خلال 3 أيام عمل.";
+                intent = "⚙️ إلغاء طلب";
+                sentiment = `<span style="color: #e53e3e; font-weight: bold;">مستاء</span>`;
+            } else if (userText.includes('خصم') || userText.includes('كود')) {
+                botResponse = "من عيونا! أبشر بأقوى كود خصم (SANAD20) يعطيك 20% على طلبك الياي، تامر أمر!";
+                intent = "🏷️ طلب كود خصم";
+                sentiment = `<span style="color: #6366f1; font-weight: bold;">متحمس</span>`;
+            }
+
+            setTimeout(() => {
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = 'msg bot';
+                botMsgDiv.textContent = botResponse;
+                chatBody.appendChild(botMsgDiv);
+                
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                updateLiveTable(userText, intent, sentiment);
+            }, 400);
+
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function updateLiveTable(text, intent, sentiment) {
+            const tableBody = document.getElementById('tableBody');
+            const randomSessionId = "#" + Math.floor(1000 + Math.random() * 9000);
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${randomSessionId}</td>
+                <td>مستخدم تجريبي</td>
+                <td>"${text}"</td>
+                <td>${intent}</td>
+                <td>${sentiment}</td>
+            `;
+            
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+        }
+    </script>
+</body>
+</html>
