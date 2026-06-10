@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOO - Culturally Aware AI Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #0c0a12;
+            color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #241e36;
+        }
+
+        header h1 {
+            font-size: 26px;
+            color: #ffffff;
+        }
+
+        header h1 span {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        /* كرت لوحة التحكم والجدول */
+        .panel {
+            background-color: #13101f;
+            border: 1px solid #241e36;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #c084fc;
+            border-bottom: 1px solid #241e36;
+            padding-bottom: 10px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        th {
+            color: #9ca3af;
+            padding: 10px;
+            border-bottom: 2px solid #241e36;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #241e36;
+            color: #e5e7eb;
+        }
+
+        /* كرت الشات الـ Widget */
+        .chat-widget {
+            background-color: #13101f;
+            border: 1px solid #241e36;
+            border-radius: 12px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #1a162b;
+            padding: 15px;
+            border-bottom: 1px solid #241e36;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: #0f0d1a;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .msg.bot {
+            background-color: #241e36;
+            color: #e5e7eb;
+            align-self: flex-start;
+            border-right: 3px solid #a855f7;
+        }
+
+        .msg.user {
+            background-color: #4f46e5;
+            color: #ffffff;
+            align-self: flex-end;
+        }
+
+        /* الردود السريعة */
+        .quick-replies {
+            padding: 10px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background-color: #0f0d1a;
+        }
+
+        .reply-btn {
+            background-color: #1a162b;
+            border: 1px solid #312a4f;
+            color: #d1d5db;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reply-btn:hover {
+            border-color: #a855f7;
+            color: #ffffff;
+            background-color: #241e36;
+        }
+
+        /* شريط الإدخال السفلي */
+        .chat-footer {
+            padding: 12px;
+            border-top: 1px solid #241e36;
+            display: flex;
+            gap: 8px;
+            background-color: #1a162b;
+        }
+
+        .chat-input {
+            flex: 1;
+            background-color: #0c0a12;
+            border: 1px solid #312a4f;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #a855f7;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            border: none;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding: 20px;
+            color: #4b5563;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>منصة <span>DOO</span> الذكية</h1>
+        <p>نموذج محاكاة لتحليل اللهجات المحلية وأتمتة تجربة العميل (Culturally Aware NLP)</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="panel">
+            <div class="panel-title">📡 مراقبة تدفق البيانات وتحليل اللهجة الفوري</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الجلسة</th>
+                            <th>العميل</th>
+                            <th>المدخلات الحية (بالعامية)</th>
+                            <th>النية المستخرجة</th>
+                            <th>مؤشر النفسية</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td>#8421</td>
+                            <td>فاطمة الجودر</td>
+                            <td>"مشكورين وصل الفستان يجنن"</td>
+                            <td>💬 استفسار عام</td>
+                            <td><span style="color: #68d391; font-weight: bold;">إيجابي</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="chat-widget">
+            <div class="chat-header">
+                <div class="dot"></div>
+                <span>المساعد الافتراضي لشركة DOO</span>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div class="msg bot">
+                    يا هلا بك! أنا المساعد الذكي، كيف أقدر أخدمك اليوم؟ تقدر تستفسر عن شحنتك، تطلب خصم، أو تلغي طلبك مباشرة بالعامية.
+                </div>
+            </div>
+
+            <div class="quick-replies" id="quickReplies">
+                <button class="reply-btn" onclick="sendReply('يا غالي مصخت السالفة شحنتي وينها؟')">📍 وين شحنتي؟</button>
+                <button class="reply-btn" onclick="sendReply('أبي أكنسل الطلب لأنه تأخر وايد')">⚙️ إلغاء الطلب</button>
+                <button class="reply-btn" onclick="sendReply('عطونا كود خصم يدلعنا')">🏷️ طلب كود خصم</button>
+            </div>
+
+            <div class="chat-footer">
+                <input type="text" class="chat-input" id="chatInput" placeholder="اكتب رسالتك هنا بالعامية...">
+                <button class="send-btn" onclick="handleSend()">إرسال</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        DOO Cultural NLP Simulation Prototype • 2026
+    </footer>
+
+    <script>
+        // توليد معرف جلسة عشوائي للجدول
+        function generateSessionID() {
+            return 'SID-' + Math.floor(Math.random() * 100000);
+        }
+
+        // التمرير التلقائي لأسفل الشات
+        function autoScroll(element) {
+            element.scrollTo({
+                top: element.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // تحليل الكلمات العامية وتحديد النية والنفسية
+        function detectIntentAndSentiment(text) {
+            const slangMap = {
+                "مصخت": { intent: "😡 شكوى تأخير", sentiment: "غاضب / عالي" },
+                "وينها": { intent: "📍 تتبع شحنتي", sentiment: "مستاء / متوسط" },
+                "تأخرت": { intent: "😡 شكوى تأخير", sentiment: "غاضب / عالي" },
+                "أكنسل": { intent: "⚙️ إلغاء طلب", sentiment: "محايد" },
+                "خصم": { intent: "🏷️ طلب خصم", sentiment: "إيجابي" }
+            };
+            
+            for (let key in slangMap) {
+                if (text.includes(key)) {
+                    return slangMap[key];
+                }
+            }
+            return { intent: "💬 استفسار عام", sentiment: "محايد" };
+        }
+
+        // إضافة سطر جديد في جدول لوحة التحكم على اليمين
+        function appendNLPLog(rawText, intent, sentiment) {
+            const tableBody = document.getElementById("tableBody");
+            if (!tableBody) return;
+
+            const row = document.createElement("tr");
+            
+            let sentimentStyle = "color: #9ca3af;"; 
+            if (sentiment.includes("غاضب") || sentiment.includes("مستاء")) {
+                sentimentStyle = "color: #fc8181; font-weight: bold;";
+            } else if (sentiment.includes("إيجابي")) {
+                sentimentStyle = "color: #68d391; font-weight: bold;";
+            }
+
+            row.innerHTML = `
+                <td>#${Math.floor(Math.random() * 9000) + 1000}</td>
+                <td>علي البلوشي</td>
+                <td>"${rawText}"</td>
+                <td>${intent}</td>
+                <td><span style="${sentimentStyle}">${sentiment}</span></td>
+            `;
+            
+            tableBody.insertBefore(row, tableBody.firstChild);
+        }
+
+        // إدراج فقاعة محادثة داخل الشات
+        function appendMessage(text, sender) {
+            const chatBody = document.getElementById('chatBody');
+            if (!chatBody) return;
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg ' + sender;
+            msgDiv.innerText = text;
+            chatBody.appendChild(msgDiv);
+            autoScroll(chatBody);
+        }
+
+        // توليد رد آلي ذكي بالعامية الخليجية يناسب الملف الأول
+        function generateAIResponse(text) {
+            if (text.includes('وين') || text.includes('شحن')) {
+                return "أبشر بسعدك! شحنتك الحين في مركز الفرز بالمنامة، ومتوقع توصلك بكرا العصر إن شاء الله 🚚";
+            } else if (text.includes('أكنسل') || text.includes('تأخرت') || text.includes('مصخت')) {
+                return "ولا يهمك، تم رفع طلب إلغاء لطلبك وبتطير لك رسالة تأكيد بالإلغاء على الجوال فوراً ⚙️";
+            } else if (text.includes('خصم')) {
+                return "من عيوني! استخدم كود الخصم (DOO10) يعطيك 10% خصم إضافي على كل المنتجات 🎉";
+            }
+            return "فهمت عليك يا غالي! جاري تحليل رسالتك وربطها بالسيستم لخدمتك بأسرع وقت ✨";
+        }
+
+        // معالجة الإرسال من الأزرار الجاهزة
+        function sendReply(text) {
+            appendMessage(text, 'user');
+            const quickReplies = document.getElementById('quickReplies');
+            if(quickReplies) quickReplies.style.display = 'none';
+            
+            const { intent, sentiment } = detectIntentAndSentiment(text);
+            appendNLPLog(text, intent, sentiment);
+
+            setTimeout(() => {
+                const botResponse = generateAIResponse(text);
+                appendMessage(botResponse, 'bot');
+            }, 800);
+        }
+
+        // معالجة الإرسال من صندوق الكتابة
+        function handleSend() {
+            const input = document.getElementById('chatInput');
+            if (!input || input.value.trim() === "") return;
+            
+            const userText = input.value;
+            appendMessage(userText, 'user');
+            input.value = "";
+            
+            const quickReplies = document.getElementById('quickReplies');
+            if(quickReplies) quickReplies.style.display = 'none';
+
+            const { intent, sentiment } = detectIntentAndSentiment(userText);
+            appendNLPLog(userText, intent, sentiment);
+
+            setTimeout(() => {
+                const botResponse = generateAIResponse(userText);
+                appendMessage(botResponse, 'bot');
+            }, 800);
+        }
+
+        // تفعيل زر الـ Enter في الكيبورد للإرسال السريع
+        document.addEventListener("DOMContentLoaded", function() {
+            const chatInput = document.getElementById("chatInput");
+            if(chatInput) {
+                chatInput.addEventListener("keypress", function(e) {
+                    if (e.key === "Enter") {
+                        handleSend();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
